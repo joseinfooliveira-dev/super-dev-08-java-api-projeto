@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SUP-08 - Painel de Unidades</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background-color: #f4f4f4; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        button { padding: 8px 15px; background: #007bff; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Unidades Cadastradas (SUP-08)</h2>
+    <button onclick="carregarUnidades()">Atualizar Lista</button>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Sigla</th>
+        </tr>
+        </thead>
+        <tbody id="tabela-unidades"></tbody>
+    </table>
+</div>
+
+<script>
+    async function carregarUnidades() {
+        try {
+            const response = await fetch('/api/v1/unidades');
+            const data = await response.json();
+
+            const tbody = document.getElementById('tabela-unidades');
+            tbody.innerHTML = ''; // Limpa a tabela
+
+            data.content.forEach(unidade => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                        <td>${unidade.id}</td>
+                        <td>${unidade.nome}</td>
+                        <td>${unidade.sigla}</td>
+                    `;
+                tbody.appendChild(tr);
+            });
+        } catch (erro) {
+            alert("Erro ao buscar unidades. Verifique se a API está rodando.");
+        }
+    }
+</script>
+</body>
+</html>
